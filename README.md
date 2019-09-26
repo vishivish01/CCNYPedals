@@ -1,5 +1,5 @@
 # CCNYPedals
-Senior Design Project
+Senior Design Project: aggregate bike & scooter rental prices
 
 ## Project Members
 1. Cody Chen
