@@ -8,4 +8,4 @@ Senior Design Project: aggregate scooter & bike rental prices
 4. Viswanath Misir
 
 ## APIs/Datasets
-* https://github.com/NABSA/gbfs
+* Documentation for the General Bikeshare Feed Specification: https://github.com/NABSA/gbfs
