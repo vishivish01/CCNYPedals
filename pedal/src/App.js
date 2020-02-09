@@ -9,7 +9,7 @@ export default function App() {
     longitude: -77,
     width: "100vw",
     height: "100vh",
-    zoom: 10
+    zoom: 12
   });
 
   return (
@@ -17,6 +17,10 @@ export default function App() {
       <ReactMapGL
         {...viewport}
         mapboxApiAccessToken={MAPBOX_TOKEN}
+        mapStyle="mapbox://styles/cchen008/ck6fhdne30sjb1iqvxge9w504"
+        onViewportChange={viewport => {
+          setViewport(viewport);
+        }}
         >
       </ReactMapGL>
     </div>
