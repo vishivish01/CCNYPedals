@@ -1,6 +1,5 @@
 import React,{ useState } from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
-import * as birdData from "./data/bird";
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiY2NoZW4wMDgiLCJhIjoiY2s2NnYxN29wMWFjOTNvbzhmaDY3ZGxyYyJ9.VJqAlOFb4jz7AnbhadcuDQ';
 const someData = [
