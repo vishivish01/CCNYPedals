@@ -1,5 +1,7 @@
 import React,{ useState } from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiY2NoZW4wMDgiLCJhIjoiY2s2NnYxN29wMWFjOTNvbzhmaDY3ZGxyYyJ9.VJqAlOFb4jz7AnbhadcuDQ';
 const someData = [
@@ -47,10 +49,21 @@ export default function App() {
             longitude={bird.lon}
           >
             <button>
-              <img src="https://cdn0.iconfinder.com/data/icons/bicycle-19/64/road-bike-bicycle-bike-riding-512.png" height={20} width={20} ></img>
+              <img src="https://cdn0.iconfinder.com/data/icons/bicycle-19/64/road-bike-bicycle-bike-riding-512.png" height={20} width={20} alt = "bike markers"></img>
             </button>
           </Marker>
         ))}
+        <Form style={{width:400}} >
+          <Form.Group controlId="formDestination">
+            <Form.Control type="text" placeholder="Enter your location" />
+          </Form.Group>
+          <Form.Group controlId="formDestination">
+            <Form.Control type="text" placeholder="Enter your destination" />
+            <Button>
+              Search
+            </Button>
+          </Form.Group>
+        </Form>
       </ReactMapGL>
     </div>
   );
