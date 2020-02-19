@@ -1,4 +1,4 @@
-import React,{ useState } from 'react';
+import React from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -23,24 +23,48 @@ const someData = [
     "lon":-77.01053,},
 ];
 
-export default function App() {
-  const[viewport, setViewport] = useState({
-    latitude: 38.9072,
-    longitude: -77,
-    width: "100vw",
-    height: "100vh",
-    zoom: 12
+var setUserLocation = () => {
+  navigator.geolocation.getCurrentPosition(position => {
+     let setUserLocation = {
+         lat: position.coords.latitude,
+         long: position.coords.longitude
+      };
+     let newViewport = {
+        height: "100vh",
+        width: "100vw",
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        zoom: 12
+      };
+      this.setState({
+        viewport: newViewport,
+        userLocation: setUserLocation
+     });
   });
+};
+
+
+export default function App() {
+
+  const state = {
+    viewport: {
+      latitude: 38.9072,
+      longitude: -77,
+      width: "100vw",
+      height: "100vh",
+      zoom: 12
+    },
+    userLocation: {}
+  };
 
   return (
     <div>
       <ReactMapGL
-        {...viewport}
+        {...state.viewport}
         mapboxApiAccessToken={MAPBOX_TOKEN}
         mapStyle="mapbox://styles/cchen008/ck6fhdne30sjb1iqvxge9w504"
-        onViewportChange={viewport => {
-          setViewport(viewport);
-        }}
+        onViewportChange={viewport => 
+          setUserLocation.setState( { viewport } ) }      
       >
         {someData.map(bird => (
           <Marker 
