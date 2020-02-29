@@ -24,11 +24,47 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+    <link rel="stylesheet" href="leaflet-routing-machine.css" />
+    <script type="text/javascript" src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+   crossorigin="">
+   </script>
+   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.js'></script>
+   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css' rel='stylesheet' />
+   <script src="leaflet-routing-machine.js"></script>
     <title>React App</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="mapid" style="height:100vh; width:100vw"></div>
+    <script>
+      var initLat = 38.9072
+      var initLong = -77
+      L.mapbox.accessToken = 'pk.eyJ1IjoibGxhemFsYSIsImEiOiJjazZwdmJ3OHExcW1yM2VueXB1NXcyNXU5In0.CMjAdPgsN5UGqO6yhwrtSQ';
+      var map = L.map('mapid').setView([initLat, initLong], 13);
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'llazala/ck77s50ku0jh41jp3g4swn1g5',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: L.mapbox.accessToken
+      }).addTo(map);
+
+      L.Routing.control({
+        waypoints: [
+         L.latLng(-77.04228043556213,
+           38.91123029116831),
+         L.latLng(-77.03192710876465,
+           38.9156464163512)
+       ],
+       routeWhileDragging: true
+      }).addTo(map);
+    </script>
+
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
