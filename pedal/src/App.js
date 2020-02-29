@@ -23,6 +23,7 @@ const someData = [
     "lon":-77.01053,},
 ];
 
+
 export default function App() {
   const[viewport, setViewport] = useState({
     latitude: 38.9072,
@@ -31,6 +32,20 @@ export default function App() {
     height: "100vh",
     zoom: 12
   });
+
+  let setUserLocation = () => {
+    navigator.geolocation.getCurrentPosition(position => {
+      let newViewport = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        height: "100vw",
+        width: "100vw",
+        zoom: 13,
+      }
+      console.log(position.coords.longitude);
+      setViewport(newViewport);
+    })
+  };
 
   return (
     <div>
@@ -54,9 +69,11 @@ export default function App() {
           </Marker>
         ))}
         <Form style={{width:400}} >
+          {/*
           <Form.Group controlId="formDestination">
             <Form.Control type="text" placeholder="Enter your location" />
           </Form.Group>
+          */}
           <Form.Group controlId="formDestination">
             <Form.Control type="text" placeholder="Enter your destination" />
             <Button>
@@ -64,6 +81,7 @@ export default function App() {
             </Button>
           </Form.Group>
         </Form>
+        <Button onClick={setUserLocation} variant="info">My Location</Button>
       </ReactMapGL>
     </div>
   );
