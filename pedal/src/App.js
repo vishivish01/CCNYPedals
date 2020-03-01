@@ -2,6 +2,9 @@ import React,{ useState } from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import './App.css'
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiY2NoZW4wMDgiLCJhIjoiY2s2NnYxN29wMWFjOTNvbzhmaDY3ZGxyYyJ9.VJqAlOFb4jz7AnbhadcuDQ';
 const someData = [
@@ -23,6 +26,7 @@ const someData = [
     "lon":-77.01053,},
 ];
 
+
 export default function App() {
   const[viewport, setViewport] = useState({
     latitude: 38.9072,
@@ -31,6 +35,20 @@ export default function App() {
     height: "100vh",
     zoom: 12
   });
+
+  let setUserLocation = () => {
+    navigator.geolocation.getCurrentPosition(position => {
+      let newViewport = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        height: "100vw",
+        width: "100vw",
+        zoom: 13,
+      }
+      console.log(position.coords.longitude);
+      setViewport(newViewport);
+    })
+  };
 
   return (
     <div>
@@ -53,17 +71,28 @@ export default function App() {
             </button>
           </Marker>
         ))}
-        <Form style={{width:400}} >
-          <Form.Group controlId="formDestination">
-            <Form.Control type="text" placeholder="Enter your location" />
-          </Form.Group>
-          <Form.Group controlId="formDestination">
-            <Form.Control type="text" placeholder="Enter your destination" />
-            <Button>
-              Search
-            </Button>
-          </Form.Group>
-        </Form>
+          <Row>
+            <Col>
+              <Form >
+                {/*
+                <Form.Group controlId="formDestination">
+                  <Form.Control type="text" placeholder="Enter your location" />
+                </Form.Group>
+                */}
+                <Form.Group controlId="formDestination">
+                  <Form.Control type="text" placeholder="Enter your destination" />
+                </Form.Group>
+              </Form>
+            </Col>
+            <Col>
+              <Button variant="info">Search</Button>
+            </Col>
+            <Col>
+              <Button onClick={setUserLocation} variant="light" className="my-location">
+                <img src="https://icons-for-free.com/download-icon-desire+game+goal+mission+sport+target+icon-1320184914414056998_512.png" className="target"></img>
+              </Button>
+            </Col>
+          </Row>
       </ReactMapGL>
     </div>
   );
