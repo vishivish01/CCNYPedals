@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import Form from 'react-bootstrap/Form';
 import L from 'leaflet';
 import {Marker, TileLayer, Map} from 'react-leaflet';
-import Routing from "./routing.js";
+import LocateControl from "./locatecontrol.js"
+import Routing from "./routing.js"
 
 const someData = [
   {
@@ -24,14 +25,23 @@ const someData = [
 ];
 
 var myIcon = L.icon({
-  iconURL: '',
+  iconURL: "https://unpkg.com/leaflet@1.4.0/dist/images/marker-icon.png",
   iconSize: [25,41],
   iconAnchor: [12.5, 45],
   popupAnchor: [0, -41]
 });
+
 var initLat = 38.9072;
 var initLong = -77;
-var initZoom = 13;
+var initZoom = 12;
+
+const locateOptions = {
+      position: 'topright',
+      strings: {
+          title: 'Current geolocation'
+      },
+      onActivate: () => {} // callback before engine starts retrieving locations
+  }
 
 class App extends Component {
   // {someData.map(bird => (
@@ -71,13 +81,15 @@ class App extends Component {
   render() {
     const position = [this.state.location.lat, this.state.location.lng]
     return(
-      <Map className="map" style={{ height: "100vh", weight: "100%" }} center={position} zoom={this.state.zoom}>
+      <Map className="map" style={{ height: "100vh", weight: "100vw" }} center={position} zoom={this.state.zoom}>
        <TileLayer
          attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
          url="https://api.mapbox.com/styles/v1/llazala/ck77s50ku0jh41jp3g4swn1g5/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGxhemFsYSIsImEiOiJjazZwdjlwZ2wwZTFyM2tuemtocHBwNHV3In0.FR2WEGpBqWPxj1xz48s3dQ"
        />
+       <LocateControl options={locateOptions} startDirectly/>
+       <Routing from ={position} to={[-73.85810136795044, 40.86554583142571]} map={this.refs.map}/>
        <div id="search-form">
-        <Form style={{width:"100vh"}} onSubmit={this.HandleSubmit}>
+        <Form style={{width:"100vw"}} onSubmit={this.HandleSubmit}>
           <input type="text" placeholder="Enter your location" />
           <input type="text" placeholder="Enter your destination" />
           <input type="submit" value="Go"/>

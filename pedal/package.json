@@ -13,6 +13,7 @@
     "leaflet": "^1.6.0",
     "leaflet-geosearch": "^2.7.0",
     "leaflet-routing-machine": "^3.2.12",
+    "leaflet.locatecontrol": "^0.70.0",
     "lrm-google": "^1.0.1",
     "mapbox-gl": "^1.8.1",
     "mapbox-gl-leaflet": "0.0.11",
