@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import Form from 'react-bootstrap/Form';
 import L from 'leaflet';
 import {Marker, TileLayer, Map} from 'react-leaflet';
-import LocateControl from "./locatecontrol.js"
-import Routing from "./routing.js"
+import LocateControl from "./locatecontrol.js";
+import Routing from "./routing.js";
+import MapInfo from "./MapInfo";
 
 const someData = [
   {
@@ -33,7 +34,7 @@ var myIcon = L.icon({
 
 var initLat = 38.9072;
 var initLong = -77;
-var initZoom = 12;
+var initZoom = 13;
 
 const locateOptions = {
       position: 'topright',
@@ -63,6 +64,13 @@ class App extends Component {
     zoom: initZoom
   }
 
+  saveMap = map => {
+    this.map = map;
+    this.setState({
+      isMapInit: true
+    });
+  };
+
   componentDidMount(){
     navigator.geolocation.getCurrentPosition((position) => {
       this.setState({
@@ -87,7 +95,7 @@ class App extends Component {
          url="https://api.mapbox.com/styles/v1/llazala/ck77s50ku0jh41jp3g4swn1g5/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGxhemFsYSIsImEiOiJjazZwdjlwZ2wwZTFyM2tuemtocHBwNHV3In0.FR2WEGpBqWPxj1xz48s3dQ"
        />
        <LocateControl options={locateOptions} startDirectly/>
-       <Routing from ={position} to={[-73.85810136795044, 40.86554583142571]} map={this.refs.map}/>
+       {this.state.isMapInit && <Routing map={this.map} />}
        <div id="search-form">
         <Form style={{width:"100vw"}} onSubmit={this.HandleSubmit}>
           <input type="text" placeholder="Enter your location" />
