@@ -2,6 +2,9 @@ import React,{ useState } from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import './App.css'
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiY2NoZW4wMDgiLCJhIjoiY2s2NnYxN29wMWFjOTNvbzhmaDY3ZGxyYyJ9.VJqAlOFb4jz7AnbhadcuDQ';
 const someData = [
@@ -68,20 +71,28 @@ export default function App() {
             </button>
           </Marker>
         ))}
-        <Form style={{width:400}} >
-          {/*
-          <Form.Group controlId="formDestination">
-            <Form.Control type="text" placeholder="Enter your location" />
-          </Form.Group>
-          */}
-          <Form.Group controlId="formDestination">
-            <Form.Control type="text" placeholder="Enter your destination" />
-            <Button>
-              Search
-            </Button>
-          </Form.Group>
-        </Form>
-        <Button onClick={setUserLocation} variant="info">My Location</Button>
+          <Row>
+            <Col>
+              <Form >
+                {/*
+                <Form.Group controlId="formDestination">
+                  <Form.Control type="text" placeholder="Enter your location" />
+                </Form.Group>
+                */}
+                <Form.Group controlId="formDestination">
+                  <Form.Control type="text" placeholder="Enter your destination" />
+                </Form.Group>
+              </Form>
+            </Col>
+            <Col>
+              <Button variant="info">Search</Button>
+            </Col>
+            <Col>
+              <Button onClick={setUserLocation} variant="light" className="my-location">
+                <img src="https://icons-for-free.com/download-icon-desire+game+goal+mission+sport+target+icon-1320184914414056998_512.png" className="target"></img>
+              </Button>
+            </Col>
+          </Row>
       </ReactMapGL>
     </div>
   );
