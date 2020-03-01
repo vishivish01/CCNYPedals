@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import ReactMapGL, { Marker } from 'react-map-gl';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import L from 'leaflet';
+import {Marker, TileLayer, Map} from 'react-leaflet';
+import Routing from "./routing.js";
 
-
-const MAPBOX_TOKEN = 'pk.eyJ1IjoibGxhemFsYSIsImEiOiJjazZwdmJ3OHExcW1yM2VueXB1NXcyNXU5In0.CMjAdPgsN5UGqO6yhwrtSQ';
 const someData = [
   {
     "bike_id":"7f5a4199-4f9d-490d-8ac2-2565ba501fe7",
@@ -24,21 +23,15 @@ const someData = [
     "lon":-77.01053,},
 ];
 
-// setUserLocation = () => {
-
-//   navigator.geolocation.getCurrentPosition(position => {
-//       let newViewport = {
-//           height: "100vh",
-//           width: "100vw",
-//           latitude: position.coords.latitude,
-//           longitude: position.coords.longitude,
-//           zoom: 12
-//       }
-//       this.setState({
-//           viewport: newViewport
-//       })
-//   })
-// }
+var myIcon = L.icon({
+  iconURL: '',
+  iconSize: [25,41],
+  iconAnchor: [12.5, 45],
+  popupAnchor: [0, -41]
+});
+var initLat = 38.9072;
+var initLong = -77;
+var initZoom = 13;
 
 class App extends Component {
   // {someData.map(bird => (
@@ -52,20 +45,45 @@ class App extends Component {
   //     </button>
   //   </Marker>
   // ))}
+  state = {
+    location: {
+      lat: initLat,
+      lng: initLong,
+    },
+    zoom: initZoom
+  }
+
+  componentDidMount(){
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.setState({
+        location: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        }
+      });
+    });
+  }
+
+  HandleSubmit(event) {
+    return;
+  }
 
   render() {
+    const position = [this.state.location.lat, this.state.location.lng]
     return(
-        <Form style={{width:400}} >
-          <Form.Group controlId="formDestination">
-            <Form.Control type="text" placeholder="Enter your location" />
-          </Form.Group>
-          <Form.Group controlId="formDestination">
-            <Form.Control type="text" placeholder="Enter your destination" />
-            <Button id="search">
-              Search
-            </Button>
-          </Form.Group>
+      <Map className="map" style={{ height: "100vh", weight: "100%" }} center={position} zoom={this.state.zoom}>
+       <TileLayer
+         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+         url="https://api.mapbox.com/styles/v1/llazala/ck77s50ku0jh41jp3g4swn1g5/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGxhemFsYSIsImEiOiJjazZwdjlwZ2wwZTFyM2tuemtocHBwNHV3In0.FR2WEGpBqWPxj1xz48s3dQ"
+       />
+       <div id="search-form">
+        <Form style={{width:"100vh"}} onSubmit={this.HandleSubmit}>
+          <input type="text" placeholder="Enter your location" />
+          <input type="text" placeholder="Enter your destination" />
+          <input type="submit" value="Go"/>
         </Form>
+      </div>
+     </Map>
     );
  }
 }
