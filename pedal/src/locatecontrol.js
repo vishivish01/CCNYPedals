@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import { withLeaflet } from "react-leaflet";
 import Locate from "leaflet.locatecontrol";
 
@@ -7,7 +7,12 @@ class LocateControl extends Component {
     const { options, startDirectly } = this.props;
     const { map } = this.props.leaflet;
 
-    const lc = new Locate(options);
+    const lc = new Locate({
+      options,
+      locateOptions: {
+               enableHighAccuracy: true
+      }
+    });
     lc.addTo(map);
 
     if (startDirectly) {

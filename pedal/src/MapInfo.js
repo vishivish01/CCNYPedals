@@ -16,7 +16,7 @@ class MapInfo extends MapControl {
   createLeafletElement(opts) {
     const dir = window.MQ.routing.directions();
     dir.route({
-      locations: ["Pelham Parkway"]
+      locations: ["Current Location","Pelham Parkway"]
     });
     return () =>
       window.MQ.routing.routeLayer({
