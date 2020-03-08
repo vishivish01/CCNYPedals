@@ -1,0 +1,28 @@
+{
+  "name": "api-backend",
+  "version": "1.0.0",
+  "description": "An api backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node api/app.js",
+    "dev": "nodemon -r dotenv/config api/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd pedal && npm install && npm run build"
+  },
+  "author": "CCNY Pedals",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "dotenv": "^8.1.0",
+    "nodemon": "^1.19.3"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "pedal/"
+    ]
+  }
+}
