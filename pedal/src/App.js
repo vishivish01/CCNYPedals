@@ -1,17 +1,11 @@
 import React, {Component} from 'react';
 import Form from 'react-bootstrap/Form';
-<<<<<<< HEAD
-import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import './App.css'
-=======
 import L from 'leaflet';
+import ReactLeafletSearch from "react-leaflet-search";
 import {Marker, TileLayer, Map} from 'react-leaflet';
 import LocateControl from "./locatecontrol.js";
 import Routing from "./routing.js";
 // import Search from "./Search.js";
->>>>>>> ll/osrm-route
 
 const someData = [
   {
@@ -32,79 +26,6 @@ const someData = [
     "lon":-77.01053,},
 ];
 
-<<<<<<< HEAD
-
-export default function App() {
-  const[viewport, setViewport] = useState({
-    latitude: 38.9072,
-    longitude: -77,
-    width: "100vw",
-    height: "100vh",
-    zoom: 12
-  });
-
-  let setUserLocation = () => {
-    navigator.geolocation.getCurrentPosition(position => {
-      let newViewport = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-        height: "100vw",
-        width: "100vw",
-        zoom: 13,
-      }
-      console.log(position.coords.longitude);
-      setViewport(newViewport);
-    })
-  };
-
-  return (
-    <div>
-      <ReactMapGL
-        {...viewport}
-        mapboxApiAccessToken={MAPBOX_TOKEN}
-        mapStyle="mapbox://styles/cchen008/ck6fhdne30sjb1iqvxge9w504"
-        onViewportChange={viewport => {
-          setViewport(viewport);
-        }}
-      >
-        {someData.map(bird => (
-          <Marker 
-            key={bird.bike_id}
-            latitude={bird.lat}
-            longitude={bird.lon}
-          >
-            <button>
-              <img src="https://cdn0.iconfinder.com/data/icons/bicycle-19/64/road-bike-bicycle-bike-riding-512.png" height={20} width={20} alt = "bike markers"></img>
-            </button>
-          </Marker>
-        ))}
-          <Row>
-            <Col>
-              <Form >
-                {/*
-                <Form.Group controlId="formDestination">
-                  <Form.Control type="text" placeholder="Enter your location" />
-                </Form.Group>
-                */}
-                <Form.Group controlId="formDestination">
-                  <Form.Control type="text" placeholder="Enter your destination" />
-                </Form.Group>
-              </Form>
-            </Col>
-            <Col>
-              <Button variant="info">Search</Button>
-            </Col>
-            <Col>
-              <Button onClick={setUserLocation} variant="light" className="my-location">
-                <img src="https://icons-for-free.com/download-icon-desire+game+goal+mission+sport+target+icon-1320184914414056998_512.png" className="target"></img>
-              </Button>
-            </Col>
-          </Row>
-      </ReactMapGL>
-    </div>
-  );
-}
-=======
 var myIcon = L.icon({
   iconURL: "https://unpkg.com/leaflet@1.4.0/dist/images/marker-icon.png",
   iconSize: [25,41],
@@ -177,6 +98,7 @@ class App extends Component {
          url="https://api.mapbox.com/styles/v1/llazala/ck77s50ku0jh41jp3g4swn1g5/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGxhemFsYSIsImEiOiJjazZwdjlwZ2wwZTFyM2tuemtocHBwNHV3In0.FR2WEGpBqWPxj1xz48s3dQ" />
         <LocateControl options={locateOptions} startDirectly/>
         {this.state.isMapInit && <Routing map={this.map} from={[40.87127382104877, -73.85756492614746]} to={[40.845696868319834, -73.85765075683594]}/>}
+        <ReactLeafletSearch position="topleft"/>
         <div id="search-form">
           <Form style={{width:"100vw", position:"absolute"}} onSubmit={this.HandleSubmit}>
             <input type="text" placeholder="Enter your location" />
@@ -190,4 +112,3 @@ class App extends Component {
 }
 
 export default App;
->>>>>>> ll/osrm-route
