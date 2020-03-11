@@ -99,13 +99,14 @@ class App extends Component {
         <LocateControl options={locateOptions} startDirectly/>
         {this.state.isMapInit && <Routing map={this.map} from={[40.87127382104877, -73.85756492614746]} to={[40.845696868319834, -73.85765075683594]}/>}
         <ReactLeafletSearch position="topleft"/>
-        <div id="search-form">
+        
+        {/* <div id="search-form">
           <Form style={{width:"100vw", position:"absolute"}} onSubmit={this.HandleSubmit}>
             <input type="text" placeholder="Enter your location" />
             <input type="text" placeholder="Enter your destination" />
             <input type="submit" value="Go"/>
           </Form>
-        </div>
+        </div> */}
      </Map>
     );
  }
