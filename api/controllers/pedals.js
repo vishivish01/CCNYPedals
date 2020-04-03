@@ -38,5 +38,16 @@ router.get('/', (req,res) => {
   
 }); */
 
+/* returns a list of the closest ten bikes/scooters at the location provided by the params `lat` and `lon` */
+router.get('/:lat/:long', (req, res) => {
+  /*
+    IDEA:
+    - keep track of a "top ten" list by:
+    - (i) call every api to get a list of bikes/scooters
+    - (ii) compute the distance between user's location and each specific bike => store that distance in a field
+    - (iii) at the end, filter out only the first ten and return to the client
+  */
+});
+
 
 module.exports = router;

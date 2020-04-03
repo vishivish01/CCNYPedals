@@ -1,21 +1,42 @@
 # JSON Specification
 
-All backend routes start with `/api`, e.g. `localhost:8000/api/pedals`
+## GET `/api/pedals`
 
+- Explanation of HTTP response (JSON format)
+
+    Field | Type | Defines
+    ---|---|---|---
+    `bikes` |  Array | Array that contains one object per bike that is currently stopped as defined below.
+    \-&nbsp;`bike_id` |  String | Identifier of a bike
+    \-&nbsp;`lat` |  Number | Latitude of the bike.
+    \-&nbsp;`lon` |  Number | Longitude of the bike.
+
+- `/api/pedals` returns a list of the closest ten bikes/scooters near user's current location:
+    ```json
+    {
+        "bikes" : []
+    }
+    ```
+
+- `/api/pedals/:lat/:lon` returns a list of the closest ten bikes/scooters at the location provided by the params `lat` and `lon`
+    ```json
+    {
+        "bikes" : []
+    }
+    ```
     
-## GET    
+- `/api/pedals/:lat/:lon?sort_by=price` returns a list of bikes/scooters sorted by fare price
+    ```jsonc
+    {
+        "bikes" : []
+    }
+    ```
 
-- `/api/pedals`
-    + returns a list of the closest ten bikes/scooters near user's current location
-
-- `/api/pedals/:lat/:lon'`
-    + returns a list of the closest ten bikes/scooters at the location provided by the params `lat` and `lon`
+- `/api/pedals/:lat/:lon?sort_by=duration` returns a list of bikes/scooters sorted by trip duration time
+    ```jsonc
+    {
+        "bikes" : []
+    }
+    ```
     
-- `/api/pedals/:lat/:lon?sort_by=price`
-    + returns a list of bikes/scooters sorted by fare price
-
-- `/api/pedals/:lat/:lon?sort_by=duration`
-    + returns a list of bikes/scooters sorted by trip duration time
-    
-- `/api/route/:start/:end`
-    + returns an array containing a list of directions that will guide the user from `start` location to `end` location
+- `/api/route/:start/:end` returns an array containing a list of directions that will guide the user from `start` location to `end` location
