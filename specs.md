@@ -1,29 +1,33 @@
 # JSON Specification
 
+API is using the following systems to fulfill endpoints:
+- Lime: https://data.lime.bike/api/partners/v1/gbfs/washington_dc/gbfs.json
+- Lyft: https://s3.amazonaws.com/lyft-lastmile-production-iad/lbs/dca/gbfs.json
+- Bike JUMP System: https://gbfs.uber.com/v1/dcb/gbfs.json
+- Scooter JUMP System: https://gbfs.uber.com/v1/dcs/gbfs.json
+
 ## GET `/api/pedals`
 
-- Explanation of HTTP response (JSON format)
+- JSON response for this endpoint will have the following fields:
 
     Field | Type | Defines
     ---|---|---|
-    `bikes` |  Array | Array that contains one object per bike that is currently stopped as defined below.
+    `bikes` |  Array | An array of objects with each object representing a physical bike/scooter
     \-&nbsp;`bike_id` |  String | Identifier of a bike
     \-&nbsp;`lat` |  Number | Latitude of the bike.
     \-&nbsp;`lon` |  Number | Longitude of the bike.
 
-- `/api/pedals` returns a list of the closest ten bikes/scooters near user's current location:
+- `/api/pedals` returns a random list of bikes/scooters aggregated from several vendors:
     ```json
     {
-        "bikes" : [ 
+        "bikes": [ 
             {
                 "bike_id": "e23ab4",
-                "lat": "38.9248",
-                "lon": "-77.0321",
+                "lat": 38.9248,
+                "lon": -77.0321,
                 "vehicle_type": "scooter"
             },
-            {
-                "...": "..."
-            }
+            ...
         ]
     }
     ```
@@ -31,16 +35,14 @@
 - `/api/pedals/:lat/:lon` returns a list of the closest ten bikes/scooters at the location provided by the params `lat` and `lon`
     ```json
     {
-        "bikes" : [ 
+        "bikes": [ 
             {
                 "bike_id": "e23ab4",
-                "lat": "38.9248",
-                "lon": "-77.0321",
+                "lat": 38.9248,
+                "lon": -77.0321,
                 "vehicle_type": "scooter"
             },
-            {
-                "...": "..."
-            }
+            ...
         ]
     }
     ```
@@ -48,16 +50,14 @@
 - `/api/pedals/:lat/:lon?sort_by=price` returns a list of bikes/scooters sorted by fare price
     ```jsonc
     {
-        "bikes" : [ 
+        "bikes": [ 
             {
                 "bike_id": "e23ab4",
-                "lat": "38.9248",
-                "lon": "-77.0321",
+                "lat": 38.9248,
+                "lon": -77.0321,
                 "vehicle_type": "scooter"
             },
-            {
-                "...": "..."
-            }
+            ...
         ]
     }
     ```
@@ -65,16 +65,14 @@
 - `/api/pedals/:lat/:lon?sort_by=duration` returns a list of bikes/scooters sorted by trip duration time
     ```jsonc
     {
-        "bikes" : [ 
+        "bikes": [ 
             {
                 "bike_id": "e23ab4",
-                "lat": "38.9248",
-                "lon": "-77.0321",
+                "lat": 38.9248,
+                "lon": -77.0321,
                 "vehicle_type": "scooter"
             },
-            {
-                "...": "..."
-            }
+            ...
         ]
     }
     ```

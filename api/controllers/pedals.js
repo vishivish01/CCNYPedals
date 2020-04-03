@@ -2,14 +2,15 @@ const express = require('express');
 const router = express.Router();
 const fetch = require('node-fetch');
 
-// This is a simple example for providing basic CRUD routes for
-// a resource/model. It provides the following:
-//    GET    /posts
-//    POST   /posts
-//    GET    /posts/:id
-//    PUT    /posts/:id
-//    DELETE /posts/:id 
+/* object to store list of systems */
+const systems = {
+  lime: "https://data.lime.bike/api/partners/v1/gbfs/washington_dc/gbfs.json",
+  lyft: "https://s3.amazonaws.com/lyft-lastmile-production-iad/lbs/dca/gbfs.json",
+  bike_jump: "https://gbfs.uber.com/v1/dcb/gbfs.json",
+  scooter_jump: "https://gbfs.uber.com/v1/dcs/gbfs.json"
+}
 
+/* returns a random list of bikes/scooters aggregated from several vendors */
 router.get('/', (req,res) => {
   // initialize an array of empty bikes
   let jsonResponse = {
@@ -34,12 +35,8 @@ router.get('/', (req,res) => {
   // res.json({"bikes": [{"bike_id": 12345}]});
 });
 
-/* router.get('/:id', (req, res) => {
-  
-}); */
-
-/* returns a list of the closest ten bikes/scooters at the location provided by the params `lat` and `lon` */
-router.get('/:lat/:long', (req, res) => {
+/* returns a list of the closest ten bikes/scooters at the location provided by the params :lat and :lon */
+router.get('/:lat/:lon', (req, res) => {
   /*
     IDEA:
     - keep track of a "top ten" list by:
@@ -48,6 +45,5 @@ router.get('/:lat/:long', (req, res) => {
     - (iii) at the end, filter out only the first ten and return to the client
   */
 });
-
 
 module.exports = router;
