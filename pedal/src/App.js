@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import Form from 'react-bootstrap/Form';
 import L from 'leaflet';
 import ReactLeafletSearch from "react-leaflet-search";
 import {Marker, TileLayer, Map} from 'react-leaflet';
 import LocateControl from "./locatecontrol.js";
 import Routing from "./routing.js";
 import Control from "react-leaflet-control";
-import TransportBtn from "./TransportBtn";
-
-// import Search from "./Search.js";
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownToggle from 'react-bootstrap/DropdownToggle';
+import DropdownMenu from 'react-bootstrap/DropdownMenu';
+import DropdownItem from 'react-bootstrap/DropdownItem';
 
 const someData = [
   {
@@ -60,14 +60,29 @@ class App extends Component {
   //     </button>
   //   </Marker>
   // ))}
-  state = {
-    location: {
-      lat: initLat,
-      lng: initLong,
-    },
-    zoom: initZoom,
-    isMapInit: false
+  constructor() {
+    super();
+    this.bikeClick = this.bikeClick.bind(this);
+    this.trainClick = this.trainClick.bind(this);
+    this.state = {
+      markers: [[19.4100819, -99.1630388]],
+      location: {
+        lat: initLat,
+        lng: initLong,
+      },
+      zoom: initZoom,
+      isMapInit: false
+    }
   }
+
+  bikeClick() {
+    console.log('Bike Click happened');
+  }
+
+  trainClick(){
+    console.log('Train Click happened');
+  }
+
 
   componentDidMount() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -96,6 +111,7 @@ class App extends Component {
     return(
       console.log("The position is now:" + position),
         <Map className="map" style={{ height: "100vh", weight: "100vw" }} center={position} zoom={this.state.zoom} ref={this.saveMap}>
+        {/*
         {someData.map(bird => (
           <Marker
             key={bird.bike_id}
@@ -106,6 +122,7 @@ class App extends Component {
           >
           </Marker>
         ))}
+          */}
           <TileLayer
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://api.mapbox.com/styles/v1/llazala/ck77s50ku0jh41jp3g4swn1g5/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGxhemFsYSIsImEiOiJjazZwdjlwZ2wwZTFyM2tuemtocHBwNHV3In0.FR2WEGpBqWPxj1xz48s3dQ" />
@@ -113,15 +130,16 @@ class App extends Component {
           {this.state.isMapInit && <Routing map={this.map} from={[40.87127382104877, -73.85756492614746]} to={[40.845696868319834, -73.85765075683594]}/>}
           <ReactLeafletSearch position="topleft"/>
           <Control position="topleft">
-            <TransportBtn />
+            <Dropdown>
+              <DropdownToggle variant="info">
+                  Transportation
+              </DropdownToggle>
+              <DropdownMenu>
+                  <DropdownItem onClick={this.bikeClick} >Bike</DropdownItem>
+                  <DropdownItem onClick={this.trainClick}>Train</DropdownItem>
+              </DropdownMenu>
+          </Dropdown>
           </Control>
-          {/* <div id="search-form">
-            <Form style={{width:"100vw", position:"absolute"}} onSubmit={this.HandleSubmit}>
-              <input type="text" placeholder="Enter your location" />
-              <input type="text" placeholder="Enter your destination" />
-              <input type="submit" value="Go"/>
-            </Form>
-          </div> */}
       </Map>
     );
  }
