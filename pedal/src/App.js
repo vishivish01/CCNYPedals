@@ -65,7 +65,8 @@ class App extends Component {
     this.bikeClick = this.bikeClick.bind(this);
     this.trainClick = this.trainClick.bind(this);
     this.state = {
-      markers: [[19.4100819, -99.1630388]],
+      showBike: false,
+      showTrain: false,
       location: {
         lat: initLat,
         lng: initLong,
@@ -77,10 +78,32 @@ class App extends Component {
 
   bikeClick() {
     console.log('Bike Click happened');
+    if(this.state.showTrain ==true) {
+      this.setState({
+        showBike: true,
+        showTrain: false,
+      });
+    }
+    else {
+      this.setState({
+        showBike: true,
+      })
+    }
   }
 
   trainClick(){
     console.log('Train Click happened');
+    if(this.state.showBike == true){
+      this.setState({
+        showBike: false,
+        showTrain: true,
+      });
+    }
+    else {
+      this.setState({
+        showTrain: true,
+      });
+    }
   }
 
 
@@ -139,6 +162,18 @@ class App extends Component {
                   <DropdownItem onClick={this.trainClick}>Train</DropdownItem>
               </DropdownMenu>
           </Dropdown>
+          {this.state.showBike ?
+              someData.map(bird => (
+                <Marker
+                  key={bird.bike_id}
+                  position={[
+                    bird.lat,
+                    bird.lon
+                  ]}
+                >
+                </Marker>
+              )) : null
+          }
           </Control>
       </Map>
     );
