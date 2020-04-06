@@ -17,7 +17,7 @@ router.get('/', (req,res) => {
     "bikes" : []
   }
 
-  fetch('https://data.lime.bike/api/partners/v1/gbfs/washington_dc/free_bike_status')
+  fetch('https://s3.amazonaws.com/lyft-lastmile-production-iad/lbs/dca/free_bike_status.json')
     .then(response => response.json()) // get the raw content, convert it to json
     .then(json => { // take that json, extract the first 5 elements and add it to our array
       // console.log(json.data.bikes);
