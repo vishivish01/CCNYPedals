@@ -65,6 +65,8 @@ class App extends Component {
     this.bikeClick = this.bikeClick.bind(this);
     this.trainClick = this.trainClick.bind(this);
     this.state = {
+      isLoaded: false,
+      bikes: [],
       showBike: false,
       showTrain: false,
       location: {
@@ -116,6 +118,22 @@ class App extends Component {
         }
       }, () => console.log(this.state));
     });
+
+    fetch("http://localhost:3000/api/pedals")
+      .then(res => res.json())
+      .then((result) => {
+          this.setState({
+            isLoaded: true,
+            bikes: result.bikes
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
   }
 
   HandleSubmit(event) {
@@ -131,6 +149,12 @@ class App extends Component {
 
   render() {
     const position = [this.state.location.lat, this.state.location.lng];
+    const { error, isLoaded, bikes } = this.state;
+    if (error) {
+      return <div>Error: {error.message}</div>;
+    } else if (!isLoaded) {
+      return <div>Loading...</div>;
+    } else {
     return(
       console.log("The position is now:" + position),
         <Map className="map" style={{ height: "100vh", weight: "100vw" }} center={position} zoom={this.state.zoom} ref={this.saveMap}>
@@ -178,6 +202,7 @@ class App extends Component {
       </Map>
     );
  }
+}
 }
 
 export default App;
