@@ -13,18 +13,25 @@ const systems = {
 
 /* returns a random list of bikes/scooters aggregated from several vendors */
 router.get('/', (req,res) => {
-  // initialize an array of empty bikes
-  let jsonResponse = {
+  // variable used as output
+  let data = {
     "bikes": []
   }
 
   fetch('https://s3.amazonaws.com/lyft-lastmile-production-iad/lbs/dca/free_bike_status.json')
-    .then(response => response.json()) // get the raw content, convert it to json
-    .then(json => { // take that json, extract the first 10 elements and add it to our array
+    .then(resp => resp.json()) // once the promise has been resolved, convert it to JSON => which will return yet another promise
+    .then(json => { // once that's been resolved, you now have access to the response body in JSON format
+      // add the first ten bikes that you see to your output variable
       for (let index = 0; index < 10; index++) {
-        jsonResponse.bikes.push(json.data.bikes[index]);
+        // push an object contaning only the properties that you need
+        data.bikes.push({
+          bike_id: json.data.bikes[index].bike_id,
+          lat: json.data.bikes[index].lat,
+          lon: json.data.bikes[index].lon,
+          type: json.data.bikes[index].type
+        });
       }
-      res.json(jsonResponse);
+      res.json(data);
     });
 });
 
@@ -38,6 +45,7 @@ router.get('/:lat/:lon', (req, res) => {
     - (iii) at the end, filter out only the first ten and return to the client
   */
 
+  // JSON object to return
   let data = {
     "bikes": [] // variable for output
   }
