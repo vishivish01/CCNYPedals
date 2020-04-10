@@ -1,4 +1,4 @@
-# JSON Specification
+# API JSON Specification
 
 API is using the following systems to fulfill endpoints:
 - Lime: https://data.lime.bike/api/partners/v1/gbfs/washington_dc/gbfs.json
@@ -8,16 +8,17 @@ API is using the following systems to fulfill endpoints:
 
 ## GET `/api/pedals`
 
-- JSON response for this endpoint will have the following fields:
+- HTTP JSON response for this endpoint will have the following fields:
 
-    Field | Type | Defines
+    Field | Type | Meaning
     ---|---|---|
-    `bikes` |  Array | An array of objects with each object representing a physical bike/scooter
-    \-&nbsp;`bike_id` |  String | Identifier of a bike
+    `bikes` |  Array | An array containing an object for each available bike/scooter: `[{...}, {...}, {...}]`. Inside the object will be the properties defined below.
+    \-&nbsp;`bike_id` |  String | Identifier of a bike.
     \-&nbsp;`lat` |  Number | Latitude of the bike.
     \-&nbsp;`lon` |  Number | Longitude of the bike.
+    \-&nbsp;`type` |  String | Entity of type bike or electric scooter.
 
-- `/api/pedals` returns a random list of bikes/scooters aggregated from several vendors:
+- `/api/pedals` a *test* endpoint that returns a random list of bikes/scooters aggregated from several vendors:
     ```json
     {
         "bikes": [ 
@@ -26,8 +27,7 @@ API is using the following systems to fulfill endpoints:
                 "lat": 38.9248,
                 "lon": -77.0321,
                 "vehicle_type": "scooter"
-            },
-            ...
+            }
         ]
     }
     ```
@@ -41,8 +41,7 @@ API is using the following systems to fulfill endpoints:
                 "lat": 38.9248,
                 "lon": -77.0321,
                 "vehicle_type": "scooter"
-            },
-            ...
+            }
         ]
     }
     ```
@@ -56,8 +55,7 @@ API is using the following systems to fulfill endpoints:
                 "lat": 38.9248,
                 "lon": -77.0321,
                 "vehicle_type": "scooter"
-            },
-            ...
+            }
         ]
     }
     ```
@@ -71,8 +69,7 @@ API is using the following systems to fulfill endpoints:
                 "lat": 38.9248,
                 "lon": -77.0321,
                 "vehicle_type": "scooter"
-            },
-            ...
+            }
         ]
     }
     ```
