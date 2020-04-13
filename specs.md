@@ -27,7 +27,8 @@ API is using the following systems to fulfill endpoints:
                 "lat": 38.9248,
                 "lon": -77.0321,
                 "vehicle_type": "scooter"
-            }
+            },
+            /* and so on... */
         ]
     }
     ```
@@ -41,7 +42,8 @@ API is using the following systems to fulfill endpoints:
                 "lat": 38.9248,
                 "lon": -77.0321,
                 "vehicle_type": "scooter"
-            }
+            },
+            /* and so on... */
         ]
     }
     ```
@@ -55,7 +57,8 @@ API is using the following systems to fulfill endpoints:
                 "lat": 38.9248,
                 "lon": -77.0321,
                 "vehicle_type": "scooter"
-            }
+            },
+            /* and so on... */
         ]
     }
     ```
@@ -69,7 +72,8 @@ API is using the following systems to fulfill endpoints:
                 "lat": 38.9248,
                 "lon": -77.0321,
                 "vehicle_type": "scooter"
-            }
+            },
+            /* and so on... */
         ]
     }
     ```
