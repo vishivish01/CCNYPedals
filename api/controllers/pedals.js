@@ -1,42 +1,103 @@
 const express = require('express');
 const router = express.Router();
 const fetch = require('node-fetch');
+const distFrom = require('distance-from');
 
-// This is a simple example for providing basic CRUD routes for
-// a resource/model. It provides the following:
-//    GET    /posts
-//    POST   /posts
-//    GET    /posts/:id
-//    PUT    /posts/:id
-//    DELETE /posts/:id 
+/* object to store list of systems */
+const systems = {
+  lime: "https://data.lime.bike/api/partners/v1/gbfs/washington_dc/gbfs.json",
+  lyft: "https://s3.amazonaws.com/lyft-lastmile-production-iad/lbs/dca/gbfs.json",
+  bike_jump: "https://gbfs.uber.com/v1/dcb/gbfs.json",
+  scooter_jump: "https://gbfs.uber.com/v1/dcs/gbfs.json"
+}
 
+/* returns a random list of bikes/scooters aggregated from several vendors */
 router.get('/', (req,res) => {
-  // initialize an array of empty bikes
-  let jsonResponse = {
-    "bikes" : []
+  // variable used as output
+  let data = {
+    "bikes": []
   }
 
-  fetch('https://data.lime.bike/api/partners/v1/gbfs/washington_dc/free_bike_status')
-    .then(response => response.json()) // get the raw content, convert it to json
-    .then(json => { // take that json, extract the first 5 elements and add it to our array
-      // console.log(json.data.bikes);
-      for (let index = 0; index < 5; index++) {
-        // console.log(json.data.bikes[index]);
-        jsonResponse.bikes.push(json.data.bikes[index]);
-        // console.log(jsonResponse);
+  fetch('https://s3.amazonaws.com/lyft-lastmile-production-iad/lbs/dca/free_bike_status.json')
+    .then(resp => resp.json()) // once the promise has been resolved, convert it to JSON => which will return yet another promise
+    .then(json => { // once that's been resolved, you now have access to the response body in JSON format
+      // add the first ten bikes that you see to your output variable
+      for (let index = 0; index < 10; index++) {
+        // push the currently indexed object into the bikes array (only storing necessary properties)
+        data.bikes.push({
+          bike_id: json.data.bikes[index].bike_id,
+          lat: json.data.bikes[index].lat,
+          lon: json.data.bikes[index].lon,
+          type: json.data.bikes[index].type
+        });
       }
-
-      // console.log('End of loop, printing array...');
-      // console.log(jsonResponse);
-      res.json(jsonResponse);
+      res.json(data);
     });
-
-  // res.json({"bikes": [{"bike_id": 12345}]});
 });
 
-/* router.get('/:id', (req, res) => {
-  
-}); */
+/* returns a list of the closest ten bikes/scooters at the location provided by the params :lat and :lon */
+router.get('/:lat/:lon', (req, res) => {
+  /*
+    IDEA:
+    - keep track of a "top ten" list by:
+    - (i) call every api to get a list of bikes/scooters
+    - (ii) compute the distance between user's location and each specific bike => store that distance in a field
+    - (iii) at the end, filter out only the first ten and return to the client
+  */
 
+  // variable used as output
+  let data = {
+    "bikes": []
+  }
+
+  // location variable needs to be in an array ([lat, lon]) in order to pass as argument to helper function
+  let userLocation = [];
+  userLocation.push(Number(req.params.lat));
+  userLocation.push(Number(req.params.lon));
+  
+  // convenient storage for bike's "location"
+  let bikeLocation = [];
+
+  // binding to hold computed distance between user's location and a specific bike; will be updated everytime we iterate through the JSON response
+  let distance;
+
+  // binding to hold JSON API response
+  let bikeResponse;
+
+  fetch('https://s3.amazonaws.com/lyft-lastmile-production-iad/lbs/dca/free_bike_status.json')
+    .then(resp => resp.json())
+    .then(json => {
+      // reference the bikes array value from the JSON response and ...
+      // file it under a convenient name for easy loop iteration and modification
+      // REMEMBER: json.data.bikes points to an ARRAY with each element an object representing a bike/scooter
+      bikeResponse = json.data.bikes;
+
+      for (let index = 0; index < bikeResponse.length; index++) {
+        // you now have access to the array 'bikeResponse' containing an object for every available bike/scooter
+        
+        // for each bike in the array, compute the distance between the user's location and the bike by first,
+        // extracting the bike's lat, long and storing them in an array
+        bikeLocation.push(Number(bikeResponse[index].lat));
+        bikeLocation.push(Number(bikeResponse[index].lon));
+        // and passing the appropriate bindings to the helper function
+        // perhaps, save the computed distance in a variable?
+        distance = distFrom(userLocation).to(bikeLocation).in('mi'); // this is meters, not miles
+        // add a property called "distance" to the currently indexed bike and have its value the distance that you just computed/saved
+        bikeResponse[index].distance = distance;        
+      }
+
+    // now that you've computed the distance between a user's location and every other bike in the response, try returning the closest 10
+    // perhaps sort the list of bikes now with computed distances
+    // iterate through the first 10 and push them into your output array
+    // alternatively, we can "slice the array
+    bikeResponse = bikeResponse.sort((a, b) => a - b);
+
+    for (let index = 0; index < 10; index++) {
+      data.bikes.push(bikeResponse[index]);
+    }
+
+    res.json(data); /* final output */
+    });
+});
 
 module.exports = router;
