@@ -88,6 +88,7 @@ class App extends Component {
       isLoaded: false,
       bikes: [],
       showBike: false,
+      showBPrice: false,
       showTrain: false,
       location: {
         lat: initLat,
@@ -103,6 +104,7 @@ class App extends Component {
     if(this.state.showTrain ==true) {
       this.setState({
         showBike: true,
+        showBPrice: true,
         showTrain: false,
       });
     }
@@ -118,6 +120,7 @@ class App extends Component {
     if(this.state.showBike == true){
       this.setState({
         showBike: false,
+        showBPrice: false,
         showTrain: true,
       });
     }
@@ -229,6 +232,10 @@ class App extends Component {
                 >
                 </Marker>
               )) : null
+          }
+          {
+            this.state.showBPrice &&
+            (<PriceList></PriceList>)
           }
           </Control>
       </Map>
