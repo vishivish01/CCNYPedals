@@ -88,6 +88,7 @@ class App extends Component {
       isLoaded: false,
       bikes: [],
       showBike: false,
+      showBPrice: false,
       showTrain: false,
       location: {
         lat: initLat,
@@ -103,6 +104,7 @@ class App extends Component {
     if(this.state.showTrain ==true) {
       this.setState({
         showBike: true,
+        showBPrice: true,
         showTrain: false,
       });
     }
@@ -118,6 +120,7 @@ class App extends Component {
     if(this.state.showBike == true){
       this.setState({
         showBike: false,
+        showBPrice: false,
         showTrain: true,
       });
     }
@@ -139,12 +142,12 @@ class App extends Component {
       }, () => console.log(this.state));
     });
 
-    fetch("http://localhost:3000/api/pedals")
-      .then(res => res.json())
-      .then((result) => {
+    fetch("/api/pedals")
+      .then(response => response.json())
+      .then((data) => {
           this.setState({
             isLoaded: true,
-            bikes: result.bikes
+            bikes: data.bikes
           });
         },
         (error) => {
@@ -170,12 +173,11 @@ class App extends Component {
   render() {
     const position = [this.state.location.lat, this.state.location.lng];
     const { error, isLoaded, bikes } = this.state;
-    /*
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
       return <div>Loading...</div>;
-    } else {*/
+    } else {
     return(
       console.log("The position is now:" + position),
         <Map className="map" style={{ height: "100vh", weight: "100vw" }} center={position} zoom={this.state.zoom} ref={this.saveMap}>
@@ -219,11 +221,27 @@ class App extends Component {
                 </Marker>
               )) : null
           }
-          <PriceList></PriceList>
+          {this.state.showTrain ?
+              bikes.map(bikes => (
+                <Marker
+                  key={bikes.bike_id}
+                  position={[
+                    bikes.lat,
+                    bikes.lon
+                  ]}
+                >
+                </Marker>
+              )) : null
+          }
+          {
+            this.state.showBPrice &&
+            (<PriceList></PriceList>)
+          }
           </Control>
       </Map>
     );
  }
+}
 }
 
 export default App;
