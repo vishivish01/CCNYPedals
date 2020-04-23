@@ -142,7 +142,7 @@ class App extends Component {
       }, () => console.log(this.state));
     });
 
-    fetch("http://localhost:8000/api/pedals")
+    fetch("/api/pedals")
       .then(response => response.json())
       .then((data) => {
           this.setState({
