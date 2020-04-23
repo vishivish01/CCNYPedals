@@ -29,6 +29,8 @@ const someData = [
     "lon":-77.01053,},
 ];
 
+const proxyurl = "https://cors-anywhere.herokuapp.com/";
+
 var myIcon = L.icon({
   iconURL: "https://unpkg.com/leaflet@1.4.0/dist/images/marker-icon.png",
   iconSize: [25,41],
@@ -119,7 +121,7 @@ class App extends Component {
       }, () => console.log(this.state));
     });
 
-    fetch("http://localhost:8000/api/pedals")
+    fetch(proxyurl + "http://localhost:8000/api/pedals")
       .then(response => response.json())
       .then((data) => {
           this.setState({
