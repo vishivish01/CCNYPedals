@@ -9,25 +9,45 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownToggle from 'react-bootstrap/DropdownToggle';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import DropdownItem from 'react-bootstrap/DropdownItem';
+import { ListGroup } from 'react-bootstrap';
+import ResultsList from './ResultsList.js';
 
 const someData = [
   {
     "bike_id":"7f5a4199-4f9d-490d-8ac2-2565ba501fe7",
     "lat":38.895802,
-    "lon":-77.006593,},
+    "lon":-77.006593,
+    "price": 1.20,
+  },
   {
     "bike_id":"b675160c-306c-4ed6-99b8-b94fa3269cc2",
     "lat":38.903634,
-    "lon":-77.026413,},
+    "lon":-77.026413,
+    "price": 2.20,
+  },
   {
     "bike_id":"c0f3eed4-6e48-4755-b5b7-303c42f475bb",
     "lat":38.90307,
-    "lon":-77.043318,},
+    "lon":-77.043318,
+    "price": 3.20,
+  },
   {
     "bike_id":"c1d509e7-ac19-43c4-a1e3-54623e0cb9d8",
     "lat":38.900236,
-    "lon":-77.01053,},
+    "lon":-77.01053,
+    "price": 4.20,
+  },
 ];
+
+const PriceList = () => (
+  <ListGroup>
+    {someData.map(item => (
+      <ListGroup.Item key={item.bike_id} action="true" >
+        Price: ${item.price}
+      </ListGroup.Item>
+    ))}
+  </ListGroup>
+)
 
 var myIcon = L.icon({
   iconURL: "https://unpkg.com/leaflet@1.4.0/dist/images/marker-icon.png",
@@ -199,6 +219,7 @@ class App extends Component {
                 </Marker>
               )) : null
           }
+          <PriceList></PriceList>
           </Control>
       </Map>
     );
