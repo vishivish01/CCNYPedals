@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import Form from 'react-bootstrap/Form';
 import L from 'leaflet';
 import ReactLeafletSearch from "react-leaflet-search";
 import {Marker, TileLayer, Map} from 'react-leaflet';
@@ -28,6 +27,16 @@ const sampleData = [
     "lat":40.865545831425,
     "lon":-73.86445283889,},
 ];
+
+const PriceList = () => (
+  <ListGroup>
+    {someData.map(item => (
+      <ListGroup.Item key={item.bike_id} action="true" >
+        Price: ${item.price}
+      </ListGroup.Item>
+    ))}
+  </ListGroup>
+)
 
 var myIcon = L.icon({
   iconURL: "https://unpkg.com/leaflet@1.4.0/dist/images/marker-icon.png",
@@ -60,14 +69,54 @@ class App extends Component {
   //     </button>
   //   </Marker>
   // ))}
-  state = {
-    location: {
-      lat: initLat,
-      lng: initLong,
-    },
-    zoom: initZoom,
-    isMapInit: false
+  constructor() {
+    super();
+    this.bikeClick = this.bikeClick.bind(this);
+    this.trainClick = this.trainClick.bind(this);
+    this.state = {
+      isLoaded: false,
+      bikes: [],
+      showBike: false,
+      showTrain: false,
+      location: {
+        lat: initLat,
+        lng: initLong,
+      },
+      zoom: initZoom,
+      isMapInit: false
+    }
   }
+
+  bikeClick() {
+    console.log('Bike Click happened');
+    if(this.state.showTrain ==true) {
+      this.setState({
+        showBike: true,
+        showTrain: false,
+      });
+    }
+    else {
+      this.setState({
+        showBike: true,
+      })
+    }
+  }
+
+  trainClick(){
+    console.log('Train Click happened');
+    if(this.state.showBike == true){
+      this.setState({
+        showBike: false,
+        showTrain: true,
+      });
+    }
+    else {
+      this.setState({
+        showTrain: true,
+      });
+    }
+  }
+
 
   componentDidMount() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -78,6 +127,22 @@ class App extends Component {
         }
       }, () => console.log(this.state));
     });
+
+    fetch("http://localhost:3000/api/pedals")
+      .then(res => res.json())
+      .then((result) => {
+          this.setState({
+            isLoaded: true,
+            bikes: result.bikes
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
   }
 
   HandleSubmit(event) {
@@ -93,9 +158,28 @@ class App extends Component {
 
   render() {
     const position = [this.state.location.lat, this.state.location.lng];
+    const { error, isLoaded, bikes } = this.state;
+    /*
+    if (error) {
+      return <div>Error: {error.message}</div>;
+    } else if (!isLoaded) {
+      return <div>Loading...</div>;
+    } else {*/
     return(
       console.log("The position is now:" + position),
         <Map className="map" style={{ height: "100vh", weight: "100vw" }} center={position} zoom={this.state.zoom} ref={this.saveMap}>
+        {/*
+        {someData.map(bird => (
+          <Marker
+            key={bird.bike_id}
+            position={[
+              bird.lat,
+              bird.lon
+            ]}
+          >
+          </Marker>
+        ))}
+          */}
           <TileLayer
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://api.mapbox.com/styles/v1/llazala/ck77s50ku0jh41jp3g4swn1g5/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGxhemFsYSIsImEiOiJjazZwdjlwZ2wwZTFyM2tuemtocHBwNHV3In0.FR2WEGpBqWPxj1xz48s3dQ" />
@@ -103,7 +187,28 @@ class App extends Component {
           {this.state.isMapInit && <Routing map={this.map} from={[40.8712738210487, -73.8575649261474]} to={[40.84569686831983, -73.8576507568359]}/>}
           <ReactLeafletSearch position="topleft"/>
           <Control position="topleft">
-            <TransportBtn></TransportBtn>
+            <Dropdown>
+              <DropdownToggle variant="info">
+                  Transportation
+              </DropdownToggle>
+              <DropdownMenu>
+                  <DropdownItem onClick={this.bikeClick} >Bike</DropdownItem>
+                  <DropdownItem onClick={this.trainClick}>Train</DropdownItem>
+              </DropdownMenu>
+          </Dropdown>
+          {this.state.showBike ?
+              someData.map(bird => (
+                <Marker
+                  key={bird.bike_id}
+                  position={[
+                    bird.lat,
+                    bird.lon
+                  ]}
+                >
+                </Marker>
+              )) : null
+          }
+          <PriceList></PriceList>
           </Control>
           <Control position='topleft'>
             <ResultsList></ResultsList>
