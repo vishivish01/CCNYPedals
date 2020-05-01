@@ -15,9 +15,9 @@ class TransitRouting extends MapLayer {
       ],
       router: new L.Routing.Google({
         travelMode: 'TRANSIT',
-        transitOptions: {
-          modes: ['SUBWAY']
-        }
+        // transitOptions: {
+        //  modes: ['SUBWAY']
+        // }
       }),
       lineOptions: {
         styles: [

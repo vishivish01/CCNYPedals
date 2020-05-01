@@ -198,7 +198,8 @@ class App extends Component {
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://api.mapbox.com/styles/v1/llazala/ck77s50ku0jh41jp3g4swn1g5/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGxhemFsYSIsImEiOiJjazZwdjlwZ2wwZTFyM2tuemtocHBwNHV3In0.FR2WEGpBqWPxj1xz48s3dQ" />
           <LocateControl options={locateOptions} startDirectly />
-          {this.state.isMapInit && <Routing map={this.map} from={[40.87127382104877, -73.85756492614746]} to={[40.845696868319834, -73.85765075683594]} />}
+          {this.state.isMapInit && <Routing map={this.map} from={[38.93065095, -77.07059515]} to={[38.88976815, -76.97188307]} />}
+          {this.state.isMapInit && <TransitRouting map={this.map} from={[38.93065095, -77.07059515]} to={[38.88976815, -76.97188307]} />}
           <ReactLeafletSearch position="topleft" />
           <Control position="topleft">
             <Dropdown>
