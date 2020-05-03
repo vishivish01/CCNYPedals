@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import L from 'leaflet';
 import ReactLeafletSearch from "react-leaflet-search";
-import {Marker, TileLayer, Map} from 'react-leaflet';
+import {Marker, TileLayer, Map, Popup} from 'react-leaflet';
 import LocateControl from "./locatecontrol.js";
 import Routing from "./routing.js";
 import Control from "react-leaflet-control";
@@ -38,6 +38,9 @@ const someData = [
     "price": 4.20,
   },
 ];
+
+let sLat = 0;
+let sLng = 0;
 
 const PriceList = () => (
   <ListGroup>
@@ -131,6 +134,19 @@ class App extends Component {
     }
   }
 
+  myPopup = (SearchInfo) => {
+    sLat = Object.values(SearchInfo.latLng)[0];
+    sLng = Object.values(SearchInfo.latLng)[1];
+    return(
+      <Popup>
+        <div>
+          <p>I am a custom popUp</p>
+          <p>latitude and longitude from search component: {SearchInfo.latLng.toString().replace(',',' , ')}</p>
+          <p>Info from search component: {SearchInfo.info}</p>
+        </div>
+      </Popup>
+    );
+  }
 
   componentDidMount() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -159,9 +175,6 @@ class App extends Component {
       )
   }
 
-  HandleSubmit(event) {
-    return;
-  }
 
   saveMap = map => {
     this.map = map;
@@ -180,6 +193,7 @@ class App extends Component {
     } else {
     return(
       console.log("The position is now:" + position),
+      console.log("lat:"+ sLat + " lng:" + sLng ),
         <Map className="map" style={{ height: "100vh", weight: "100vw" }} center={position} zoom={this.state.zoom} ref={this.saveMap}>
         {/*
         {someData.map(bird => (
@@ -198,8 +212,8 @@ class App extends Component {
           url="https://api.mapbox.com/styles/v1/llazala/ck77s50ku0jh41jp3g4swn1g5/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGxhemFsYSIsImEiOiJjazZwdjlwZ2wwZTFyM2tuemtocHBwNHV3In0.FR2WEGpBqWPxj1xz48s3dQ" />
           <LocateControl options={locateOptions} startDirectly/>
           {this.state.isMapInit && <Routing map={this.map} from={[40.87127382104877, -73.85756492614746]} to={[40.845696868319834, -73.85765075683594]}/>}
-          <ReactLeafletSearch position="topleft"/>
-          <Control position="topleft">
+          <ReactLeafletSearch position="topleft" popUp={this.myPopup} />
+          <Control position="topright">
             <Dropdown>
               <DropdownToggle variant="info">
                   Transportation
@@ -209,6 +223,7 @@ class App extends Component {
                   <DropdownItem onClick={this.trainClick}>Train</DropdownItem>
               </DropdownMenu>
           </Dropdown>
+          
           {this.state.showBike ?
               someData.map(bird => (
                 <Marker
