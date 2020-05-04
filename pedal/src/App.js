@@ -10,8 +10,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownToggle from 'react-bootstrap/DropdownToggle';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import DropdownItem from 'react-bootstrap/DropdownItem';
-import { ListGroup } from 'react-bootstrap';
-import ResultsList from './ResultsList.js';
 
 const someData = [
   {
@@ -39,16 +37,6 @@ const someData = [
     "price": 4.20,
   },
 ];
-
-const PriceList = () => (
-  <ListGroup>
-    {someData.map(item => (
-      <ListGroup.Item key={item.bike_id} action="true" >
-        Price: ${item.price}
-      </ListGroup.Item>
-    ))}
-  </ListGroup>
-)
 
 var myIcon = L.icon({
   iconURL: "https://unpkg.com/leaflet@1.4.0/dist/images/marker-icon.png",
