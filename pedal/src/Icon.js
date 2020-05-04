@@ -1,13 +1,23 @@
 import L from 'leaflet';
 
-var thisIcon = new L.Icon({
-    iconUrl: require('./icon/bike.PNG'),
+const birdIcon = new L.Icon({
+    iconUrl: require('./markers/bird.png'),
     iconAnchor: null,
     popupAnchor: null,
     shadowUrl: null,
     shadowSize: null,
     shadowAnchor: null,
-    iconSize: new L.Point(60, 75),
+    iconSize: new L.Point(30, 30),
 });
 
-export { thisIcon };
+const lyftIcon = new L.Icon({
+    iconUrl: require('./markers/lyft.png'),
+    iconAnchor: null,
+    popupAnchor: null,
+    shadowUrl: null,
+    shadowSize: null,
+    shadowAnchor: null,
+    iconSize: new L.Point(30, 30),
+});
+
+export { birdIcon, lyftIcon };
