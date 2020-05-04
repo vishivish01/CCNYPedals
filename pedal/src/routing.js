@@ -22,11 +22,12 @@ class Routing extends MapLayer {
           }
         ]
       },
+      profile: 'cycling',
       addWaypoints: true,
       draggableWaypoints: false,
       fitSelectedRoutes: false,
       showAlternatives: false,
-      // serviceUrl: '3.91.22.41' //Custom OSRM server url
+      serviceUrl: 'http://3.91.22.41/route/v1' //Custom OSRM server url
     }).addTo(map.leafletElement);
     return leafletElement.getPlan();
   }
