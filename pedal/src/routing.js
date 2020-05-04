@@ -11,7 +11,7 @@ class Routing extends MapLayer {
     let leafletElement = L.Routing.control({
       waypoints: [
         L.latLng(from[0], from[1]),
-        L.latLng(to[0], to[1]) //we can add another waypoint here
+        L.latLng(to[0], to[1]) //we can add another waypoint here. Destination 1 being the bike dock. D2 being the user's destination
       ],
       lineOptions: {
         styles: [
@@ -25,7 +25,8 @@ class Routing extends MapLayer {
       addWaypoints: true,
       draggableWaypoints: false,
       fitSelectedRoutes: false,
-      showAlternatives: false
+      showAlternatives: false,
+      // serviceUrl: '3.91.22.41' //Custom OSRM server url
     }).addTo(map.leafletElement);
     return leafletElement.getPlan();
   }
