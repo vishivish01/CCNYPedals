@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import L from 'leaflet';
 import ReactLeafletSearch from "react-leaflet-search";
-import { Marker, TileLayer, Map } from 'react-leaflet';
+import {Marker, TileLayer, Map, Popup} from 'react-leaflet';
 import LocateControl from "./locatecontrol.js";
 import Routing from "./routing.js";
 import TransitRouting from "./TransitRouting.js"
@@ -12,6 +12,7 @@ import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import DropdownItem from 'react-bootstrap/DropdownItem';
 import { ListGroup } from 'react-bootstrap';
 import ResultsList from './ResultsList.js';
+import { birdIcon, lyftIcon } from './Icon.js';
 
 const someData = [
   {
@@ -39,6 +40,9 @@ const someData = [
     "price": 4.20,
   },
 ];
+
+let sLat = 0;
+let sLng = 0;
 
 const PriceList = () => (
   <ListGroup>
@@ -132,6 +136,19 @@ class App extends Component {
     }
   }
 
+  myPopup = (SearchInfo) => {
+    sLat = Object.values(SearchInfo.latLng)[0];
+    sLng = Object.values(SearchInfo.latLng)[1];
+    return(
+      <Popup>
+        <div>
+          <p>I am a custom popUp</p>
+          <p>latitude and longitude from search component: {SearchInfo.latLng.toString().replace(',',' , ')}</p>
+          <p>Info from search component: {SearchInfo.info}</p>
+        </div>
+      </Popup>
+    );
+  }
 
   componentDidMount() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -160,9 +177,6 @@ class App extends Component {
       )
   }
 
-  HandleSubmit(event) {
-    return;
-  }
 
   saveMap = map => {
     this.map = map;
@@ -179,8 +193,9 @@ class App extends Component {
     } else if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
-      return (
-        console.log("The position is now:" + position),
+    return(
+      console.log("The position is now:" + position),
+      console.log("lat:"+ sLat + " lng:" + sLng ),
         <Map className="map" style={{ height: "100vh", weight: "100vw" }} center={position} zoom={this.state.zoom} ref={this.saveMap}>
           {/*
         {someData.map(bird => (
@@ -201,7 +216,7 @@ class App extends Component {
           {this.state.isMapInit && <Routing map={this.map} from={[38.8899, -77.0091]} to={[38.88976815, -76.97188307]} />}
           {this.state.isMapInit && <TransitRouting map={this.map} from={[38.8899, -77.0091]} to={[38.88976815, -76.97188307]} />}
           <ReactLeafletSearch position="topleft" />
-          <Control position="topleft">
+          <Control position="topright">
             <Dropdown>
               <DropdownToggle variant="info">
                 Transportation
@@ -219,6 +234,7 @@ class App extends Component {
                     bird.lat,
                     bird.lon
                   ]}
+                  icon= {birdIcon}
                 >
                 </Marker>
               )) : null
@@ -231,6 +247,7 @@ class App extends Component {
                     bikes.lat,
                     bikes.lon
                   ]}
+                  icon = {lyftIcon}
                 >
                 </Marker>
               )) : null
