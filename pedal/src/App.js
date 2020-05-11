@@ -12,7 +12,7 @@ import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import DropdownItem from 'react-bootstrap/DropdownItem';
 import { ListGroup } from 'react-bootstrap';
 import ResultsList from './ResultsList.js';
-import { birdIcon, lyftIcon } from './Icon.js';
+import { birdIcon, lyftIcon, trainIcon } from './Icon.js';
 import { BikePopup, TrainPopup } from './MyPopups';
 
 const someData = [
@@ -251,7 +251,7 @@ class App extends Component {
                     bikes.lat,
                     bikes.lon
                   ]}
-                  icon = {lyftIcon}
+                  icon = {trainIcon}
                 >
                   <TrainPopup />
                 </Marker>
