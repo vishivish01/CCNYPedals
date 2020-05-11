@@ -10,6 +10,7 @@ const popupContent = {
 const popupImg = {
   width: "100px",
   height: "100px",
+  borderRadius: "50%",
   display: "block",
   marginLeft: "auto",
   marginRight: "auto",
@@ -20,10 +21,6 @@ const popupText = {
   fontSize: "18px",
   marginBottom: "10px",
   marginLeft: "10px"
-};
-
-const okText = {
-  fontSize: "15px"
 };
 
 let icon;
@@ -59,8 +56,17 @@ const BikePopup = ({img, price}) => {
   const TrainPopup = () => {
     return(
       <Popup>
-        <div>
-            Hello I am train
+        <div style={popupContent}>
+            <img
+            style={popupImg}
+            src="https://cdn1.iconfinder.com/data/icons/materia-transport-vol-2/24/014_052_sign_railway_tram_train-512.png"
+          />
+          <div style={popupText}>
+            ETA: 
+          </div>
+          <div style={popupText}>
+            Price: $
+          </div>
         </div>
       </Popup>
     );
