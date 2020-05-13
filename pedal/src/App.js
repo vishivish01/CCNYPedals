@@ -12,7 +12,8 @@ import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import DropdownItem from 'react-bootstrap/DropdownItem';
 import { ListGroup } from 'react-bootstrap';
 import ResultsList from './ResultsList.js';
-import { birdIcon, lyftIcon } from './Icon.js';
+import { birdIcon, lyftIcon, trainIcon } from './Icon.js';
+import { BikePopup, TrainPopup } from './MyPopups';
 
 const someData = [
   {
@@ -215,7 +216,7 @@ class App extends Component {
           <LocateControl options={locateOptions} startDirectly />
           {this.state.isMapInit && <Routing map={this.map} from={[38.8899, -77.0091]} to={[38.88976815, -76.97188307]} />}
           {this.state.isMapInit && <TransitRouting map={this.map} from={[38.8899, -77.0091]} to={[38.88976815, -76.97188307]} />}
-          <ReactLeafletSearch position="topleft" />
+          <ReactLeafletSearch position="topleft" popUp={this.myPopup}/>
           <Control position="topright">
             <Dropdown>
               <DropdownToggle variant="info">
@@ -236,9 +237,12 @@ class App extends Component {
                   ]}
                   icon= {birdIcon}
                 >
+                  <BikePopup img="bird" price ={bird.price} />
+
                 </Marker>
               )) : null
             }
+
             {this.state.showTrain ?
               bikes.map(bikes => (
                 <Marker
@@ -247,8 +251,9 @@ class App extends Component {
                     bikes.lat,
                     bikes.lon
                   ]}
-                  icon = {lyftIcon}
+                  icon = {trainIcon}
                 >
+                  <TrainPopup />
                 </Marker>
               )) : null
             }
