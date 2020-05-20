@@ -31,7 +31,9 @@ class TransitRouting extends MapLayer {
       addWaypoints: true,
       draggableWaypoints: false,
       fitSelectedRoutes: false,
-      showAlternatives: false
+      showAlternatives: false,
+      show: false,
+      collapsible: true
     }).addTo(map.leafletElement);
     return leafletElement.getPlan();
   }

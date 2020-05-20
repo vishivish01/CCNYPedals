@@ -27,6 +27,8 @@ class Routing extends MapLayer {
       draggableWaypoints: false,
       fitSelectedRoutes: false,
       showAlternatives: false,
+      show: false,
+      collapsible: true,
       serviceUrl: 'http://3.91.22.41/route/v1' //Custom OSRM server url
     }).addTo(map.leafletElement);
     return leafletElement.getPlan();
