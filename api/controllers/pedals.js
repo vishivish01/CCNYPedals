@@ -40,8 +40,6 @@ router.get('/', (req,res) => {
       }
 
       res.json(data);
-      // console.log(json[0])
-      // res.json(json)
     });
 
   /* fetch(systems["spin"])
