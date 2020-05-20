@@ -11,11 +11,11 @@ const priceImg = {
 let icon;
 
 const ResultsList = ({ bikeId, img, price, distance}) => {
-  if (img == "bird"){
+  if (img === "bird"){
     icon = "./markers/bird.png"
-  } else if (img == "jump"){
+  } else if (img === "jump"){
     icon = "./markers/jump.png"
-  } else if (img == "lime"){
+  } else if (img === "lime"){
     icon = "./markers/lime.png"
   } else {
     icon = "./markers/lyft.png"
@@ -28,6 +28,7 @@ const ResultsList = ({ bikeId, img, price, distance}) => {
               <img
                 style={priceImg}
                 src={require("" + icon)}
+                alt="Company Logo"
               />
             </Col>
             <Col style={{fontSize: "14px", padding:"0px"}}>
