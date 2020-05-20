@@ -8,8 +8,8 @@ const popupContent = {
   marginTop: "20px"
 };
 const popupImg = {
-  width: "100px",
-  height: "100px",
+  width: "90px",
+  height: "90px",
   borderRadius: "50%",
   display: "block",
   marginLeft: "auto",
@@ -25,7 +25,7 @@ const popupText = {
 
 let icon;
 
-const BikePopup = ({img, price}) => {
+const BikePopup = ({img, price, distance}) => {
   if (img == "bird"){
     icon = "./markers/bird.png"
   } else if (img == "jump"){
@@ -43,7 +43,7 @@ const BikePopup = ({img, price}) => {
             src={require("" + icon)}
           />
           <div style={popupText}>
-            ETA: 
+            ETA: {distance} mins
           </div>
           <div style={popupText}>
             Price: $ {price.toFixed(2)}
