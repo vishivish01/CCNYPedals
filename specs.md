@@ -3,8 +3,7 @@
 API is using the following systems to fulfill endpoints:
 - Lime: https://data.lime.bike/api/partners/v1/gbfs/washington_dc/gbfs.json
 - Lyft: https://s3.amazonaws.com/lyft-lastmile-production-iad/lbs/dca/gbfs.json
-- Bike JUMP System: https://gbfs.uber.com/v1/dcb/gbfs.json
-- Scooter JUMP System: https://gbfs.uber.com/v1/dcs/gbfs.json
+- Spin: https://web.spin.pm/api/gbfs/v1/washington_dc/gbfs
 
 ## GET `/api/pedals`
 
@@ -18,6 +17,8 @@ API is using the following systems to fulfill endpoints:
     \-&nbsp;`lon` |  Number | Longitude of the bike.
     \-&nbsp;`type` |  String | Entity of type bike or electric scooter.
     \-&nbsp;`vendor` |  String | Name of company owning/operating the bike.
+    \-&nbsp;`distance` |  Number | Distance in meters (m) from user's location to bike.
+    \-&nbsp;`price` |  Number | Price of renting/operating the bike.
 
 - `/api/pedals` a *test* endpoint that returns a random list of bikes/scooters aggregated from several vendors:
     ```json
@@ -29,8 +30,7 @@ API is using the following systems to fulfill endpoints:
                 "lon": -77.0321,
                 "vehicle_type": "scooter",
                 "vendor": "lime"
-            },
-            /* and so on... */
+            }
         ]
     }
     ```
@@ -44,9 +44,10 @@ API is using the following systems to fulfill endpoints:
                 "lat": 38.9248,
                 "lon": -77.0321,
                 "vehicle_type": "scooter",
-                "vendor": "lime"
-            },
-            /* and so on... */
+                "vendor": "lyft",
+                "distance": 6.855,
+                "price": 12.75
+            }
         ]
     }
     ```
@@ -60,9 +61,10 @@ API is using the following systems to fulfill endpoints:
                 "lat": 38.9248,
                 "lon": -77.0321,
                 "vehicle_type": "scooter",
-                "vendor": "lime"
-            },
-            /* and so on... */
+                "vendor": "lime",
+                "distance": 6.855,
+                "price": 12.75
+            }
         ]
     }
     ```
@@ -76,9 +78,10 @@ API is using the following systems to fulfill endpoints:
                 "lat": 38.9248,
                 "lon": -77.0321,
                 "vehicle_type": "scooter",
-                "vendor": "lime"
-            },
-            /* and so on... */
+                "vendor": "lyft",
+                "distance": 6.855,
+                "price": 12.75
+            }
         ]
     }
     ```
