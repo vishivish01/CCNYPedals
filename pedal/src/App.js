@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import L from 'leaflet';
+//import L from 'leaflet';
 import ReactLeafletSearch from "react-leaflet-search";
 import {Marker, TileLayer, Map, Popup} from 'react-leaflet';
 import LocateControl from "./locatecontrol.js";
@@ -45,15 +45,15 @@ const someData = [
   },
 ];
 
-let sLat = 0;
-let sLng = 0;
+let sLat = null;
+let sLng = null;
 
-var myIcon = L.icon({
-  iconURL: "https://unpkg.com/leaflet@1.4.0/dist/images/marker-icon.png",
-  iconSize: [25, 41],
-  iconAnchor: [12.5, 45],
-  popupAnchor: [0, -41]
-});
+// var myIcon = L.icon({
+//   iconURL: "https://unpkg.com/leaflet@1.4.0/dist/images/marker-icon.png",
+//   iconSize: [25, 41],
+//   iconAnchor: [12.5, 45],
+//   popupAnchor: [0, -41]
+// });
 
 var initLat = 38.9072;
 var initLong = -77;
@@ -72,6 +72,7 @@ class App extends Component {
     super();
     this.bikeClick = this.bikeClick.bind(this);
     this.trainClick = this.trainClick.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     this.state = {
       isLoaded: false,
       bikes: [],
@@ -82,6 +83,11 @@ class App extends Component {
         lat: initLat,
         lng: initLong,
       },
+      isSelected: false,
+      selected: {
+        lat: null,
+        lng: null,
+      },
       zoom: initZoom,
       isMapInit: false
     }
@@ -89,7 +95,7 @@ class App extends Component {
 
   bikeClick() {
     console.log('Bike Click happened');
-    if (this.state.showTrain == true) {
+    if (this.state.showTrain === true) {
       this.setState({
         showBike: true,
         showBPrice: true,
@@ -106,7 +112,7 @@ class App extends Component {
 
   trainClick() {
     console.log('Train Click happened');
-    if (this.state.showBike == true) {
+    if (this.state.showBike === true) {
       this.setState({
         showBike: false,
         showBPrice: false,
@@ -125,13 +131,20 @@ class App extends Component {
     sLng = Object.values(SearchInfo.latLng)[1];
     return(
       <Popup>
-        <div>
-          <p>I am a custom popUp</p>
-          <p>latitude and longitude from search component: {SearchInfo.latLng.toString().replace(',',' , ')}</p>
-          <p>Info from search component: {SearchInfo.info}</p>
-        </div>
       </Popup>
     );
+  }
+
+  handleClick = (e) => {
+    const { lat, lng } = e.latlng
+      this.setState({
+      isSelected: true,
+      isSelected2: false,
+      selected: {
+        lat: lat,
+        lng: lng,
+      }
+    })
   }
 
   componentDidMount() {
@@ -179,15 +192,17 @@ class App extends Component {
     } else {
     return(
       console.log("The position is now:" + position),
-      console.log("lat:"+ sLat + " lng:" + sLng ),
+      //console.log("lat:"+ sLat + " lng:" + sLng ),
+      //console.log("lat:",this.state.selected.lat, "lng:",this.state.selected.lng),
         <Map className="map" style={{ height: "100vh", weight: "100vw" }} center={position} zoom={this.state.zoom} ref={this.saveMap}>
           <TileLayer
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://api.mapbox.com/styles/v1/llazala/ck77s50ku0jh41jp3g4swn1g5/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGxhemFsYSIsImEiOiJjazZwdjlwZ2wwZTFyM2tuemtocHBwNHV3In0.FR2WEGpBqWPxj1xz48s3dQ" />
           <LocateControl options={locateOptions} startDirectly />
-          {this.state.isMapInit && <Routing map={this.map} from={[38.8899, -77.0091]} to={[38.88976815, -76.97188307]} />}
-          {this.state.isMapInit && <TransitRouting map={this.map} from={[38.8899, -77.0091]} to={[38.88976815, -76.97188307]} />}
-          <ReactLeafletSearch position="topleft" popUp={this.myPopup}/>
+          {/*this.state.isMapInit && <Routing map={this.map} from={[38.8899, -77.0091]} to={[38.88976815, -76.97188307]} />*/}
+          {/*this.state.isMapInit && <TransitRouting map={this.map} from={[38.8899, -77.0091]} to={[38.88976815, -76.97188307]} />*/}
+          {this.state.isSelected && <TransitRouting map={this.map} from={[sLat, sLng]} to={[this.state.selected.lat, this.state.selected.lng]} />}
+          <ReactLeafletSearch position="topleft" popUp={this.myPopup} />
           <Control position="topright">
             <Dropdown>
               <DropdownToggle variant="info">
@@ -208,6 +223,7 @@ class App extends Component {
                     bird.lon
                   ]}
                   icon= {birdIcon}
+                  onClick={this.handleClick}
                 >
                   <BikePopup img="bird" price ={bird.price} distance={bird.distance} />
 
@@ -236,7 +252,6 @@ class App extends Component {
                 <ResultsList key={item.bike_id} img="bird" price={item.price} distance={item.distance}></ResultsList>
               ))
             }
-            
           </Control>
         </Map>
       );
