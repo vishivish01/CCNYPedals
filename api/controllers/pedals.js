@@ -10,6 +10,27 @@ const systems = {
   spin: "https://web.spin.pm/api/gbfs/v1/washington_dc/free_bike_status"
 }
 
+// sample JSON from each system (visualization purposes)
+let sample = {
+  "data": {
+    "bikes": [
+      {
+        "name": "169cdbb1da54e121e25da33bf03df076",
+        "type": "electric_scooter",
+        "is_disabled": 0,
+        "bike_id": "169cdbb1da54e121e25da33bf03df076",
+        "lon": -76.98485716666667,
+        "lat": 38.9004825,
+        "is_reserved": 0,
+        "rental_uris": {
+          "android": "https://dc.lft.to/lastmile_qr_scan",
+          "ios": "https://dc.lft.to/lastmile_qr_scan"
+        }
+      }
+    ]
+  }
+}
+
 /* returns a random list of bikes/scooters aggregated from several vendors */
 router.get('/', (req,res) => {
   // variable used as output
@@ -63,10 +84,9 @@ router.get('/', (req,res) => {
 /* returns a list of the closest ten bikes/scooters at the location provided by the params :lat and :lon */
 router.get('/:lat/:lon', (req, res) => {
   /*
-    IDEA:
-    - keep track of a "top ten" list by:
+    IDEA: keep track of a "top ten" list by:
     - (i) call every api to get a list of bikes/scooters
-    - (ii) compute the distance between user's location and each specific bike => store that distance in a field
+    - (ii) for each call, compute the distance between user's location and each specific bike => store that distance in a field
     - (iii) at the end, filter out only the first ten and return to the client
   */
 
@@ -75,53 +95,76 @@ router.get('/:lat/:lon', (req, res) => {
     "bikes": []
   }
 
-  // location variable needs to be in an array ([lat, lon]) in order to pass as argument to helper function
-  let userLocation = [];
-  userLocation.push(Number(req.params.lat));
-  userLocation.push(Number(req.params.lon));
-  
-  // convenient storage for bike's "location"
-  let bikeLocation = [];
+  // store system names in a convenient array
+  let systemNames = Object.keys(systems);
 
-  // binding to hold computed distance between user's location and a specific bike; will be updated everytime we iterate through the JSON response
-  let distance;
+  // array of Promises returned by 'fetch'
+  let fetchPromises = systemNames.map(name => fetch(systems[name]).then(resp => resp.json()));
+
+  /* LOCATION STUFF: START */
+  /***/
+    // location variable needs to be in an array ([lat, lon]) in order to pass as argument to helper function
+    // get coordinates of user into a data structure
+    let userLocation = [];
+    userLocation.push(Number(req.params.lat));
+    userLocation.push(Number(req.params.lon));
+    
+    // just like for the user, we need to save the coordinates of a bike into a data structure in order to pass as argument to helper function
+    // convenient storage for bike's "location"
+    let bikeLocation = [];
+
+    // finally, binding to hold computed distance between user's location and a specific bike; will be updated everytime we iterate through the array of bikes objects
+    let distance;
+  /***/
+  /* LOCATION STUFF: END */
 
   // binding to hold JSON API response
   let bikeResponse;
 
-  fetch('https://s3.amazonaws.com/lyft-lastmile-production-iad/lbs/dca/free_bike_status.json')
-    .then(resp => resp.json())
+  // given an array of Promises, wait until all have been resolved
+  Promise.all(fetchPromises)
+    // 'json' is an array contaning a JSON response for each system called
     .then(json => {
-      // reference the bikes array value from the JSON response and ...
-      // file it under a convenient name for easy loop iteration and modification
-      // REMEMBER: json.data.bikes points to an ARRAY with each element an object representing a bike/scooter
-      bikeResponse = json.data.bikes;
+      console.dir(json);
+      // outer-loop which iterates through each system response
+      for (let sIndex = 0; sIndex < systemNames.length; sIndex++) {
+        // reference the bikes array value from the JSON response and ...
+        // file it under a convenient name for easy loop iteration and modification
+        // REMEMBER: json[sIndex].data.bikes points to an ARRAY with each element an object representing a bike/scooter
+        bikeResponse = json[sIndex].data.bikes;
 
-      for (let index = 0; index < bikeResponse.length; index++) {
-        // you now have access to the array 'bikeResponse' containing an object for every available bike/scooter
-        
-        // for each bike in the array, compute the distance between the user's location and the bike by first,
-        // extracting the bike's lat, long and storing them in an array
-        bikeLocation.push(Number(bikeResponse[index].lat));
-        bikeLocation.push(Number(bikeResponse[index].lon));
-        // and passing the appropriate bindings to the helper function
-        // perhaps, save the computed distance in a variable?
-        distance = distFrom(userLocation).to(bikeLocation).in('mi'); // this is meters, not miles
-        // add a property called "distance" to the currently indexed bike and have its value the distance that you just computed/saved
-        bikeResponse[index].distance = distance;        
+        // inner loop to compute distance between user's location and each bike/scooter
+        for (let index = 0; index < bikeResponse.length; index++) {
+          // do what we did for the user's params: extract the bike's lat, long saving them in an array
+          bikeLocation.push(Number(bikeResponse[index].lat));
+          bikeLocation.push(Number(bikeResponse[index].lon));
+          // compute distance between values held in 'userLocation' and 'bikeLocation' via helper function
+          // and save the computed distance in a variable?
+          distance = distFrom(userLocation).to(bikeLocation).in('m'); // this is meters, not miles
+          // add a property called 'distance' to the currently indexed bike and have its value the distance that you just computed/saved
+          bikeResponse[index].distance = distance;
+          // also save the vendor name :D
+          bikeResponse[index].vendor = systemNames[sIndex];
+
+          // now we want to save the currently indexed bike object into our output array - we will filter our array later
+          data.bikes.push(bikeResponse[index]);
+        }
       }
+      /* AT THIS POINT, all distances should have been computed between the user and bikes/scooters in the surrounding area */
 
-    // now that you've computed the distance between a user's location and every other bike in the response, try returning the closest 10
-    // perhaps sort the list of bikes now with computed distances
-    // iterate through the first 10 and push them into your output array
-    // alternatively, we can "slice the array
-    bikeResponse = bikeResponse.sort((a, b) => a - b);
+      // try returning the closest 10
+      // perhaps sort the list of bikes now with computed distances
+      // iterate through the first 10 and push them into your output array
+      // alternatively, we can "slice" the array
+      data.bikes = data.bikes.sort((a, b) => a - b);
 
-    for (let index = 0; index < 10; index++) {
-      data.bikes.push(bikeResponse[index]);
-    }
+      /* for (let index = 0; index < 10; index++) {
+        data.bikes.push(bikeResponse[index]);
+      } */
 
-    res.json(data); /* final output */
+      data.bikes = data.bikes.slice(0, 10);
+
+      res.json(data); /* final output */
     });
 });
 
