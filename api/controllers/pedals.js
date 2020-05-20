@@ -145,7 +145,8 @@ router.get('/:lat/:lon', (req, res) => {
           bikeResponse[index].distance = distance;
           // also save the vendor name :D
           bikeResponse[index].vendor = systemNames[sIndex];
-
+          // compute price
+          bikeResponse[index].price = computePrice(3, 21).toFixed(2);
           // now we want to save the currently indexed bike object into our output array - we will filter our array later
           data.bikes.push(bikeResponse[index]);
         }
@@ -167,5 +168,9 @@ router.get('/:lat/:lon', (req, res) => {
       res.json(data); /* final output */
     });
 });
+
+function computePrice(min, max) {
+  return Math.random() * (max - min) + min;
+}
 
 module.exports = router;
