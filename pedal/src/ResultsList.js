@@ -1,17 +1,46 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { ListGroup } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 
-export default function ResultsList () {
-  return(
-    <ListGroup as="ul">
-      <ListGroup.Item as="li" active>
-        Bicycle   5 min   $1.37
-      </ListGroup.Item>
-      <ListGroup.Item as="li">Bicycle   4 min   $1.25</ListGroup.Item>
-      <ListGroup.Item as="li" disabled>
-        Morbi leo risus
-      </ListGroup.Item>
-      <ListGroup.Item as="li">Porta ac consectetur ac</ListGroup.Item>
-    </ListGroup>
-  );
+
+const priceImg = {
+  width: "50px",
+  height: "50px",
 };
+
+let icon;
+
+const ResultsList = ({ bikeId, img, price, distance}) => {
+  if (img == "bird"){
+    icon = "./markers/bird.png"
+  } else if (img == "jump"){
+    icon = "./markers/jump.png"
+  } else if (img == "lime"){
+    icon = "./markers/lime.png"
+  } else {
+    icon = "./markers/lyft.png"
+  }
+    return(
+      <ListGroup style={{width:"250px"}}>
+        <ListGroup.Item key={bikeId} action="true" >
+          <Row>
+            <Col style={{padding: "0px", textAlign:"center"}}>
+              <img
+                style={priceImg}
+                src={require("" + icon)}
+              />
+            </Col>
+            <Col style={{fontSize: "14px", padding:"0px"}}>
+              <div>
+                <strong>Price:</strong> ${price.toFixed(2)} <br></br>
+                <strong>Distance:</strong> {distance} mins
+              </div>
+            </Col>
+          </Row>
+          
+        </ListGroup.Item>
+  </ListGroup>
+    );
+}
+
+export { ResultsList };
