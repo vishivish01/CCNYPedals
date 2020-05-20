@@ -17,6 +17,7 @@ API is using the following systems to fulfill endpoints:
     \-&nbsp;`lat` |  Number | Latitude of the bike.
     \-&nbsp;`lon` |  Number | Longitude of the bike.
     \-&nbsp;`type` |  String | Entity of type bike or electric scooter.
+    \-&nbsp;`vendor` |  String | Name of company owning/operating the bike.
 
 - `/api/pedals` a *test* endpoint that returns a random list of bikes/scooters aggregated from several vendors:
     ```json
@@ -26,7 +27,8 @@ API is using the following systems to fulfill endpoints:
                 "bike_id": "e23ab4",
                 "lat": 38.9248,
                 "lon": -77.0321,
-                "vehicle_type": "scooter"
+                "vehicle_type": "scooter",
+                "vendor": "lime"
             },
             /* and so on... */
         ]
@@ -41,7 +43,8 @@ API is using the following systems to fulfill endpoints:
                 "bike_id": "e23ab4",
                 "lat": 38.9248,
                 "lon": -77.0321,
-                "vehicle_type": "scooter"
+                "vehicle_type": "scooter",
+                "vendor": "lime"
             },
             /* and so on... */
         ]
@@ -56,7 +59,8 @@ API is using the following systems to fulfill endpoints:
                 "bike_id": "e23ab4",
                 "lat": 38.9248,
                 "lon": -77.0321,
-                "vehicle_type": "scooter"
+                "vehicle_type": "scooter",
+                "vendor": "lime"
             },
             /* and so on... */
         ]
@@ -71,7 +75,8 @@ API is using the following systems to fulfill endpoints:
                 "bike_id": "e23ab4",
                 "lat": 38.9248,
                 "lon": -77.0321,
-                "vehicle_type": "scooter"
+                "vehicle_type": "scooter",
+                "vendor": "lime"
             },
             /* and so on... */
         ]

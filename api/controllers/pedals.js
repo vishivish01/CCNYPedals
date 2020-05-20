@@ -5,10 +5,9 @@ const distFrom = require('distance-from');
 
 /* object to store list of systems */
 const systems = {
-  lime: "https://data.lime.bike/api/partners/v1/gbfs/washington_dc/gbfs.json",
-  lyft: "https://s3.amazonaws.com/lyft-lastmile-production-iad/lbs/dca/gbfs.json",
-  bike_jump: "https://gbfs.uber.com/v1/dcb/gbfs.json",
-  scooter_jump: "https://gbfs.uber.com/v1/dcs/gbfs.json"
+  lime: "https://data.lime.bike/api/partners/v1/gbfs/washington_dc/free_bike_status",
+  lyft: "https://s3.amazonaws.com/lyft-lastmile-production-iad/lbs/dca/free_bike_status.json",
+  spin: "https://web.spin.pm/api/gbfs/v1/washington_dc/free_bike_status"
 }
 
 /* returns a random list of bikes/scooters aggregated from several vendors */
@@ -18,7 +17,34 @@ router.get('/', (req,res) => {
     "bikes": []
   }
 
-  fetch('https://s3.amazonaws.com/lyft-lastmile-production-iad/lbs/dca/free_bike_status.json')
+  // store system names in a convenient array
+  let systemNames = Object.keys(systems);
+
+  // array of Promises returned by 'fetch'
+  let fetchPromises = systemNames.map(name => fetch(systems[name]).then(resp => resp.json()));
+  
+  // given a collection of Promises, wait until all have been resolved
+  Promise.all(fetchPromises)
+    .then(json => {
+      for (let sIndex = 0; sIndex < systemNames.length; sIndex++) {
+        for (let index = 0; index < 10; index++) {
+          // push the currently indexed object into the bikes array (only storing necessary properties)
+          data.bikes.push({
+            bike_id: json[sIndex].data.bikes[index].bike_id,
+            lat: json[sIndex].data.bikes[index].lat,
+            lon: json[sIndex].data.bikes[index].lon,
+            type: json[sIndex].data.bikes[index].type,
+            vendor: systemNames[sIndex]
+          });
+        }
+      }
+
+      res.json(data);
+      // console.log(json[0])
+      // res.json(json)
+    });
+
+  /* fetch(systems["spin"])
     .then(resp => resp.json()) // once the promise has been resolved, convert it to JSON => which will return yet another promise
     .then(json => { // once that's been resolved, you now have access to the response body in JSON format
       // add the first ten bikes that you see to your output variable
@@ -32,7 +58,8 @@ router.get('/', (req,res) => {
         });
       }
       res.json(data);
-    });
+    }); */
+  
 });
 
 /* returns a list of the closest ten bikes/scooters at the location provided by the params :lat and :lon */
