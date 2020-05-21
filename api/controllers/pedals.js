@@ -134,6 +134,7 @@ router.get('/:lat/:lon', (req, res) => {
 
         // inner loop to compute distance between user's location and each bike/scooter
         for (let index = 0; index < bikeResponse.length; index++) {
+          bikeLocation = [];
           // do what we did for the user's params: extract the bike's lat, long saving them in an array
           bikeLocation.push(Number(bikeResponse[index].lat));
           bikeLocation.push(Number(bikeResponse[index].lon));
@@ -151,6 +152,9 @@ router.get('/:lat/:lon', (req, res) => {
         }
       }
       /* AT THIS POINT, all distances should have been computed between the user and bikes/scooters in the surrounding area */
+      /* for (let k = 0; k < data.bikes.length; k++) {
+        console.log(data.bikes[k]);
+      }  */
 
       // try returning the closest 10
       // perhaps sort the list of bikes now with computed distances
