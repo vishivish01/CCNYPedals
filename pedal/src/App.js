@@ -139,7 +139,6 @@ class App extends Component {
     const { lat, lng } = e.latlng
       this.setState({
       isSelected: true,
-      isSelected2: false,
       selected: {
         lat: lat,
         lng: lng,
@@ -201,7 +200,7 @@ class App extends Component {
           <LocateControl options={locateOptions} startDirectly />
           {/*this.state.isMapInit && <Routing map={this.map} from={[38.8899, -77.0091]} to={[38.88976815, -76.97188307]} />*/}
           {/*this.state.isMapInit && <TransitRouting map={this.map} from={[38.8899, -77.0091]} to={[38.88976815, -76.97188307]} />*/}
-          {this.state.isSelected && <TransitRouting map={this.map} from={[sLat, sLng]} to={[this.state.selected.lat, this.state.selected.lng]} />}
+          {this.state.isSelected && <TransitRouting map={this.map} from={[this.state.location.lat, this.state.location.lng]} to={[this.state.selected.lat, this.state.selected.lng]} />}
           <ReactLeafletSearch position="topleft" popUp={this.myPopup} />
           <Control position="topright">
             <Dropdown>
