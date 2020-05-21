@@ -125,7 +125,6 @@ router.get('/:lat/:lon', (req, res) => {
   Promise.all(fetchPromises)
     // 'json' is an array contaning a JSON response for each system called
     .then(json => {
-      console.dir(json);
       // outer-loop which iterates through each system response
       for (let sIndex = 0; sIndex < systemNames.length; sIndex++) {
         // reference the bikes array value from the JSON response and ...
@@ -157,7 +156,8 @@ router.get('/:lat/:lon', (req, res) => {
       // perhaps sort the list of bikes now with computed distances
       // iterate through the first 10 and push them into your output array
       // alternatively, we can "slice" the array
-      data.bikes = data.bikes.sort((a, b) => a - b);
+      // data.bikes = data.bikes.sort(comparePrice);
+      data.bikes = data.bikes.sort((a, b) => (a.distance > b.distance) ? 1 : -1);
 
       /* for (let index = 0; index < 10; index++) {
         data.bikes.push(bikeResponse[index]);
@@ -171,6 +171,21 @@ router.get('/:lat/:lon', (req, res) => {
 
 function computePrice(min, max) {
   return Math.random() * (max - min) + min;
+}
+
+function comparePrice(a, b) {
+  
+  console.log(a.distance);
+  const distanceA = a.distance
+  const distanceB = b.distance;
+
+  let comparison = 0;
+  if (distanceA > distanceB) {
+    comparison = 1;
+  } else if (distanceA < distanceB) {
+    comparison = -1;
+  }
+  return comparison;
 }
 
 module.exports = router;
