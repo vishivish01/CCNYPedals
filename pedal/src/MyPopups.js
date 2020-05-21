@@ -26,11 +26,11 @@ const popupText = {
 let icon;
 
 const BikePopup = ({img, price, distance}) => {
-  if (img == "bird"){
+  if (img === "bird"){
     icon = "./markers/bird.png"
-  } else if (img == "jump"){
+  } else if (img === "jump"){
     icon = "./markers/jump.png"
-  } else if (img == "lime"){
+  } else if (img === "lime"){
     icon = "./markers/lime.png"
   } else {
     icon = "./markers/lyft.png"
@@ -41,6 +41,7 @@ const BikePopup = ({img, price, distance}) => {
             <img
             style={popupImg}
             src={require("" + icon)}
+            alt="Company Logo"
           />
           <div style={popupText}>
             ETA: {distance} mins
@@ -60,6 +61,7 @@ const BikePopup = ({img, price, distance}) => {
             <img
             style={popupImg}
             src="https://cdn1.iconfinder.com/data/icons/materia-transport-vol-2/24/014_052_sign_railway_tram_train-512.png"
+            alt="Train Logo"
           />
           <div style={popupText}>
             ETA: 
